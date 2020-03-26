@@ -54,6 +54,16 @@ fun getName(lst: (int * bool * string * int * int) list, cardChose : int) =
       end
   else "";
 
+fun aiChooseCard(aiHand:(int * bool * string * int * int) list) = (
+  let
+    val nextInt = Random.randRange(1, List.length(aiHand))
+    val r = Random.rand(1,1)
+    val cardNum = nextInt r
+  in
+    print("The AI sent out: " ^ getName(aiHand, cardNum) ^ "\n")
+  end
+);
+
 fun playerChooseCard(hand:(int * bool * string * int * int) list) = (
   print("Enter the card number: ");
 
@@ -65,19 +75,9 @@ fun playerChooseCard(hand:(int * bool * string * int * int) list) = (
   end
 );
 
-fun aiChooseCard(aiHand:(int * bool * string * int * int) list) = (
-  let
-    val nextInt = Random.randRange(1, List.length(aiHand))
-    val r = Random.rand(0, 5)
-    val cardNum = nextInt r
-  in
-    print("The AI sent out: " ^ getName(aiHand, cardNum) ^ "\n")
-  end
-);
-
 fun combat() = 
-  aiChooseCard(AIHand);
   playerChooseCard(Hand);
+  aiChooseCard(AIHand);
 
 fun gameLoop() = (
   print("\n------------------ WELCOME TO MLSTONE ------------------\n");
@@ -87,7 +87,6 @@ fun gameLoop() = (
   while (true) do
     let
       val gCmd = valOf(TextIO.inputLine TextIO.stdIn)
-
     in
       if gCmd = "quit\n" then OS.Process.exit(OS.Process.success)
       else if gCmd = "no\n" then OS.Process.exit(OS.Process.success)
