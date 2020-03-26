@@ -24,3 +24,7 @@ val AIHand = [
     (3, true, "Mapcar", 4, 0),
     (4, false, "ML Monster", 2, 6)
 ];
+
+fun combat() = 
+  aiChooseCard(AIHand);
+  playerChooseCard(Hand);

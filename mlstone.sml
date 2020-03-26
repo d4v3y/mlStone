@@ -19,39 +19,52 @@ fun iterCount() =
   print("");
   #tick gT(); *)
 
-val Hand = [	
-  (* cost, spellp, name, attack, health *)     
-  (1, false, "C slug", 0, 1),
-  (1, false, "int", 1, 1),
-  (1, true, "++", 0, 1),
-  (1, true, "^=", 4, 0),
-  (2, false, "for (;;)", 2, 2),
-  (3, false, "switch", 3, 3),
-  (4, false, "array a[100]", 4, 4),
-  (4, true, "Bus Error Fireball", 6, 0)
-];
-
 fun getName(lst: (int * bool * string * int * int) list, cardChose : int) =
-  case lst of x::xs => #cardChose x
-  | [] => "The list is empty"
 
-fun playerChooseCard(hand:(int * bool * string * int * int) list) =
+  if List.length(lst) >= cardChose - 1 
+  then let 
+        val cardFromList = List.nth(lst, cardChose - 1)
+        val finalChoice = #3 cardFromList
+      in
+          finalChoice
+      end
+  else "";
+
+fun playerChooseCard(hand:(int * bool * string * int * int) list) = (
+  print("Enter the card number: ");
+
   let
     val inputCardNum = valOf(TextIO.inputLine TextIO.stdIn)
     val cardChose : int = valOf(Int.fromString inputCardNum)
   in
-    print("The card you chose: " ^ getName(Hand, cardChose) ^ "\n")
+    print("You choose the card: " ^ getName(hand, cardChose) ^ "\n")
   end
+);
 
-fun gameLoop() =
-  print("");
+fun aiChooseCard(aiHand:(int * bool * string * int * int) list) = (
+  let
+    val nextInt = Random.randRange(1, List.length(aiHand))
+    val r = Random.rand(0, 5)
+    val cardNum = nextInt r
+  in
+    print("The AI sent out: " ^ getName(aiHand, cardNum) ^ "\n")
+  end
+);
+
+fun gameLoop() = (
+  print("\n------------------ WELCOME TO MLSTONE ------------------\n");
+  print("\t\tTo exit game type \"quit\"\n\n");
+  print("Ready to play? (yes/no): ");
 
   while (true) do
     let
       val gCmd = valOf(TextIO.inputLine TextIO.stdIn)
+
     in
       if gCmd = "quit\n" then OS.Process.exit(OS.Process.success)
-      (* This else if is used for testing purposes *)
-      else if gCmd = "go\n" then playerChooseCard(Hand)
+      else if gCmd = "no\n" then OS.Process.exit(OS.Process.success)
+      else if gCmd = "yes\n" then combat()
       else print("Invalid command: " ^ gCmd ^ "\n")
-    end;
+    end
+);
+gameLoop();
